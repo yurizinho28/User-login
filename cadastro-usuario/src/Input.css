@@ -1,0 +1,14 @@
+label {
+    display: block;
+    margin: 1rem 0 0 0;
+    font-size: 15px;
+}
+
+input {
+    width: 300px;
+    padding: 5px;
+    border: none;
+    cursor: text;
+    border-radius: 50px;
+    margin: 0 0 1rem 0;
+}
