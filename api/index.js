@@ -2,6 +2,7 @@ import express from "express";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
 import User from "./model/schema.js";
+import bcrypt from "bcrypt";
 
 const server = express();
 dotenv.config();
@@ -18,7 +19,7 @@ try{
 }
 
 // pegando todos os Users
-server.get("/cadastro", async (req, res) => {
+server.get("/listar-usuarios", async (req, res) => {
     try{
 
         const users = await User.find();
@@ -36,16 +37,35 @@ server.get("/cadastro", async (req, res) => {
 
 // criando um novo User
 server.post("/cadastro", async (req, res) => {
-    const { nome, senha } = req.body;
-
     try{
-        const newUser = new User({
+        const { nome, senha, email, conferirSenha } = req.body;
+
+        if(!nome || !senha || !email || !conferirSenha){
+            throw new Error(res.status(400).json({"message": "Todos os campos devem ser preenchidos."}));
+        }
+        
+        if(senha !== conferirSenha){
+            throw new Error(res.status(400).json({"message": "As senhas devem ser iguais."}));
+        }
+
+        const salt = await bcrypt.genSalt(Number(process.env.SALT));
+        const hash = await bcrypt.hash(senha, salt);
+
+
+        const newUser = await new User({
             nome: nome,
-            senha: senha
+            senha: hash,
+            email: email
         })
 
-        if(!newUser || !newUser.nome || !newUser.senha){
+        if(!newUser){
             throw new Error(res.status(500).json({"message": "Falha na criação do usuário."}));
+        }
+
+        const isSameEmail = await User.findOne({ email: email });
+
+        if(isSameEmail){
+            throw new Error(res.status(401).json({"message": "Email já cadastrado."}));
         }
 
         await newUser.save();
@@ -70,4 +90,4 @@ server.delete("/cadastro", async (req, res) => {
 
 
 
-server.listen(process.env.PORTA, () => console.log(`Funcionando na porta ${process.env.PORTA}`));
+server.listen(process.env.PORTA, () => console.log(`Servidor no ar`));
