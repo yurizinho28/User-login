@@ -60,7 +60,7 @@ Este projeto tem como principal objetivo consolidar conhecimentos sobre:
 
    Crie um arquivo `.env` na raiz do projeto com as seguintes variáveis:
    ```env
-   PORT=5000
+   PORT=3000
    MONGO_URI=sua_string_de_conexao_mongodb
    ```
 
