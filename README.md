@@ -52,7 +52,7 @@ Este projeto tem como principal objetivo consolidar conhecimentos sobre:
 
 1. **Clone o repositório:**
    ```bash
-   git clone https://github.com/seu-usuario/cadastro-de-usuarios.git
+   git clone https://github.com/yurizinho28/User-login.git
    cd cadastro-de-usuarios
    ```
 
